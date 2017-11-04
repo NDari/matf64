@@ -63,7 +63,7 @@ func New(dims ...int) [][]float64 {
 }
 
 /*
-I returns a square [][]float64 with all elements alone the diagonal equal to
+I returns a square [][]float64 with all elements along the diagonal equal to
 1.0, and 0.0 elsewhere. This is the identity matrix.
 */
 func I(x int) [][]float64 {
@@ -110,41 +110,6 @@ func Flatten(m [][]float64) []float64 {
 		n = append(n, m[i]...)
 	}
 	return n
-}
-
-/*
-Apply applies a given transformer function to each element of a [][]float64 or
-[]float64 modifying it in place.
-*/
-func Apply(oneOrTwoDimFloat64Slice interface{}, f TransformerFn) {
-	switch v := oneOrTwoDimFloat64Slice.(type) {
-	case []float64:
-		for i := range v {
-			f(&v[i])
-		}
-	case [][]float64:
-		for i := range v {
-			for j := range v[i] {
-				f(&v[i][j])
-			}
-		}
-	default:
-		s := "In matf64.%s, expected []float64, or [][]float64 but received type: %T."
-		s = fmt.Sprintf(s, "Apply()", v)
-		panic(s)
-	}
-}
-
-/*
-SetAllTo sets all elements of a [][]float64 to a given value, modifying it in
-place
-*/
-func SetAllTo(m [][]float64, val float64) {
-	for i := range m {
-		for j := range m[i] {
-			m[i][j] = val
-		}
-	}
 }
 
 /*

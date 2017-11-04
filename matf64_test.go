@@ -5,6 +5,7 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	t.Helper()
 	rows := 13
 	cols := 7
 	m := New(rows)
@@ -28,6 +29,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestI(t *testing.T) {
+	t.Helper()
 	row := 10
 	m := I(row)
 	for i := range m {
@@ -47,6 +49,7 @@ func TestI(t *testing.T) {
 }
 
 func TestFlatten(t *testing.T) {
+	t.Helper()
 	row, col := 5, 3
 	m := New(row, col)
 	n := Flatten(m)
@@ -56,6 +59,7 @@ func TestFlatten(t *testing.T) {
 }
 
 func TestApply(t *testing.T) {
+	t.Helper()
 	rows := 132
 	cols := 24
 	f := func(i *float64) {
@@ -84,6 +88,7 @@ func BenchmarkApply(b *testing.B) {
 }
 
 func TestSetAllTo(t *testing.T) {
+	t.Helper()
 	row := 3
 	col := 4
 	val := 11.0
@@ -107,6 +112,7 @@ func BenchmarkSetAllTo(b *testing.B) {
 }
 
 func TestMul(t *testing.T) {
+	t.Helper()
 	row, col := 13, 12
 	m := New(row, col)
 	for i := range m {
@@ -172,6 +178,7 @@ func BenchmarkMul(b *testing.B) {
 }
 
 func TestAdd(t *testing.T) {
+	t.Helper()
 	row, col := 13, 12
 	m := New(row, col)
 	for i := range m {
@@ -227,6 +234,7 @@ func TestAdd(t *testing.T) {
 }
 
 func TestSub(t *testing.T) {
+	t.Helper()
 	row, col := 13, 12
 	m := New(row, col)
 	for i := range m {
@@ -282,6 +290,7 @@ func TestSub(t *testing.T) {
 }
 
 func TestDiv(t *testing.T) {
+	t.Helper()
 	row, col := 13, 12
 	m := New(row, col)
 	for i := range m {
@@ -338,6 +347,7 @@ func TestDiv(t *testing.T) {
 }
 
 func TestRand(t *testing.T) {
+	t.Helper()
 	row := 31
 	col := 42
 	m := Rand(row, col)
@@ -351,6 +361,7 @@ func TestRand(t *testing.T) {
 }
 
 func TestCol(t *testing.T) {
+	t.Helper()
 	row, col := 3, 5
 	m := New(row, col)
 	for i := range m {
@@ -396,6 +407,7 @@ func BenchmarkCol(b *testing.B) {
 }
 
 func TestRow(t *testing.T) {
+	t.Helper()
 	row, col := 3, 5
 	m := New(row, col)
 	for i := range m {
@@ -441,6 +453,7 @@ func BenchmarkRow(b *testing.B) {
 }
 
 func TestEqual(t *testing.T) {
+	t.Helper()
 	m := New(13, 12)
 	if !Equal(m, m) {
 		t.Errorf("m is not equal iteself")
@@ -448,6 +461,7 @@ func TestEqual(t *testing.T) {
 }
 
 func TestClone(t *testing.T) {
+	t.Helper()
 	m := New(13, 13)
 	for i := range m {
 		for j := range m[i] {
@@ -461,6 +475,7 @@ func TestClone(t *testing.T) {
 }
 
 func TestT(t *testing.T) {
+	t.Helper()
 	m := New(12, 3)
 	for i := range m {
 		for j := range m[i] {
@@ -485,6 +500,7 @@ func BenchmarkT(b *testing.B) {
 }
 
 func TestAll(t *testing.T) {
+	t.Helper()
 	m := New(100, 21)
 	for i := range m {
 		for j := range m[i] {
@@ -507,6 +523,7 @@ func TestAll(t *testing.T) {
 }
 
 func TestAny(t *testing.T) {
+	t.Helper()
 	m := New(100, 21)
 	for i := range m {
 		for j := range m[i] {
@@ -529,6 +546,7 @@ func TestAny(t *testing.T) {
 }
 
 func TestSum(t *testing.T) {
+	t.Helper()
 	row, col, val := 131, 12, 2.0
 	m := New(row, col)
 	SetAllTo(m, val)
@@ -589,6 +607,7 @@ func BenchmarkSum(b *testing.B) {
 }
 
 func TestProd(t *testing.T) {
+	t.Helper()
 	row, col, val := 3, 2, 2.0
 	m := New(row, col)
 	SetAllTo(m, val)
@@ -627,6 +646,7 @@ func TestProd(t *testing.T) {
 }
 
 func TestAvg(t *testing.T) {
+	t.Helper()
 	row, col, val := 7, 6, 3.0
 	m := New(row, col)
 	SetAllTo(m, val)
@@ -649,6 +669,7 @@ func TestAvg(t *testing.T) {
 }
 
 func TestDot(t *testing.T) {
+	t.Helper()
 	m := New(10)
 	n := New(10)
 	for i := range m {
@@ -683,6 +704,7 @@ func BenchmarkDot(b *testing.B) {
 }
 
 func TestAppendCol(t *testing.T) {
+	t.Helper()
 	v := make([]float64, 10)
 	m := New(10, 5)
 	AppendCol(m, v)
