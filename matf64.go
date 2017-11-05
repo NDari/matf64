@@ -54,7 +54,6 @@ func New(dims ...int) [][]float64 {
 			m[i] = make([]float64, c)
 		}
 	default:
-		fmt.Println("\ngocrunch/mat error.")
 		s := "In matf64.%s expected 1 or 2 arguments, but recieved %d"
 		s = fmt.Sprintf(s, "New()", len(dims))
 		panic(s)
@@ -75,17 +74,33 @@ func I(x int) [][]float64 {
 }
 
 /*
-Rand creates a x by y [][]float64 with the entries set to random numbers in the
+RandMat creates a x by y [][]float64 with the entries set to random numbers in the
 range [0, 1) (including 0, but excluding 1).
 
 A n by n [][]float64 can be created if one int is passed to this constructor, where
 a n by m matrix is created when two ints are passed.
 */
-func RandMat(dims ...int) [][]float64 {
-	m := New(dims...)
+func RandMat(x, y int, args ...float64) [][]float64 {
+	m := New(y, y)
+	var from float64
+	var to float64
+
+	switch len(args) {
+	case 0:
+		to = 1
+	case 1:
+		to = args[0]
+	case 2:
+		from = args[0]
+		to = args[1]
+	default:
+		s := "In matf64.%s expected 0-2 float64s for the range, but recieved %d"
+		s = fmt.Sprintf(s, "RandMat()", len(args))
+		panic(s)
+	}
 	for i := range m {
 		for j := range m[i] {
-			m[i][j] = rand.Float64()
+			m[i][j] = rand.Float64()*(to-from) + from
 		}
 	}
 	return m
@@ -95,8 +110,24 @@ func RandMat(dims ...int) [][]float64 {
 RandVec returns a []float64 with the entries set to random number in the
 range [0, 1)
 */
-func RandVec(size int) []float64 {
+func RandVec(size int, args ...float64) []float64 {
 	v := make([]float64, size)
+	var from float64
+	var to float64
+
+	switch len(args) {
+	case 0:
+		to = 1
+	case 1:
+		to = args[0]
+	case 2:
+		from = args[0]
+		to = args[1]
+	default:
+		s := "In matf64.%s expected 0-2 float64s for the range, but recieved %d"
+		s = fmt.Sprintf(s, "RandVec()", len(args))
+		panic(s)
+	}
 	for i := range v {
 		v[i] = rand.Float64()
 	}
