@@ -81,7 +81,7 @@ range [0, 1) (including 0, but excluding 1).
 A n by n [][]float64 can be created if one int is passed to this constructor, where
 a n by m matrix is created when two ints are passed.
 */
-func Rand(dims ...int) [][]float64 {
+func RandMat(dims ...int) [][]float64 {
 	m := New(dims...)
 	for i := range m {
 		for j := range m[i] {
@@ -89,6 +89,18 @@ func Rand(dims ...int) [][]float64 {
 		}
 	}
 	return m
+}
+
+/*
+RandVec returns a []float64 with the entries set to random number in the
+range [0, 1)
+*/
+func RandVec(size int) []float64 {
+	v := make([]float64, size)
+	for i := range v {
+		v[i] = rand.Float64()
+	}
+	return v
 }
 
 /*
@@ -125,12 +137,6 @@ Col also accepts negative indices. For example:
 The original [][]float64 is not mutated in this function.
 */
 func Col(m [][]float64, x int) []float64 {
-	if (x >= len(m[0])) || (x < -len(m[0])) {
-		fmt.Println("\ngocrunch/mat error.")
-		s := "In matf64.%s the requested column %d is outside of bounds [-%d, %d)\n"
-		s = fmt.Sprintf(s, "Col()", x, len(m[0]), len(m[0]))
-		panic(s)
-	}
 	v := make([]float64, len(m))
 	if x >= 0 {
 		for i := range m {
@@ -157,12 +163,6 @@ Row also accepts negative indices. For example:
 The original [][]float64 is not mutated in this function.
 */
 func Row(m [][]float64, x int) []float64 {
-	if (x >= len(m)) || (x < -len(m)) {
-		fmt.Println("\ngocrunch/mat error.")
-		s := "In matf64.%s the requested row %d is outside of bounds [-%d, %d)\n"
-		s = fmt.Sprintf(s, "Row()", x, len(m), len(m))
-		panic(s)
-	}
 	v := make([]float64, len(m[0]))
 	if x >= 0 {
 		copy(v, m[x])
@@ -197,10 +197,10 @@ func Equal(m, n [][]float64) bool {
 }
 
 /*
-Clone returns a duplicate of a [][]float64. The returned duplicate is "deep",
+Copy returns a duplicate of a [][]float64. The returned duplicate is "deep",
 meaning that the object can be manipulated without effecting the original.
 */
-func Clone(m [][]float64) [][]float64 {
+func Copy(m [][]float64) [][]float64 {
 	n := make([][]float64, len(m))
 	for i := range m {
 		n[i] = make([]float64, len(m[i]))
@@ -270,10 +270,10 @@ Then calling
 
 would be true if at least one element of the m is positive.
 */
-func Any(m [][]float64, f func(float64) bool) bool {
+func Any(m [][]float64, f FilterFn) bool {
 	for i := range m {
 		for j := range m[i] {
-			if f(m[i][j]) {
+			if f(&m[i][j]) {
 				return true
 			}
 		}
