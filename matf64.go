@@ -129,7 +129,7 @@ func RandVec(size int, args ...float64) []float64 {
 		panic(s)
 	}
 	for i := range v {
-		v[i] = rand.Float64()
+		v[i] = rand.Float64()*(to-from) + from
 	}
 	return v
 }
@@ -228,10 +228,10 @@ func Equal(m, n [][]float64) bool {
 }
 
 /*
-Copy returns a duplicate of a [][]float64. The returned duplicate is "deep",
+Clone returns a duplicate of a [][]float64. The returned duplicate is "deep",
 meaning that the object can be manipulated without effecting the original.
 */
-func Copy(m [][]float64) [][]float64 {
+func Clone(m [][]float64) [][]float64 {
 	n := make([][]float64, len(m))
 	for i := range m {
 		n[i] = make([]float64, len(m[i]))

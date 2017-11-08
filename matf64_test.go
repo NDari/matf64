@@ -87,13 +87,13 @@ func BenchmarkApply(b *testing.B) {
 	}
 }
 
-func TestSetAllTo(t *testing.T) {
+func TestSet(t *testing.T) {
 	t.Helper()
 	row := 3
 	col := 4
 	val := 11.0
 	m := New(row, col)
-	SetAllTo(m, val)
+	Set(m, val)
 	for i := range m {
 		for j := range m[i] {
 			if m[i][j] != val {
@@ -103,11 +103,11 @@ func TestSetAllTo(t *testing.T) {
 	}
 }
 
-func BenchmarkSetAllTo(b *testing.B) {
+func BenchmarkSet(b *testing.B) {
 	m := New(300, 1000)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		SetAllTo(m, 10.0)
+		Set(m, 10.0)
 	}
 }
 
@@ -346,11 +346,11 @@ func TestDiv(t *testing.T) {
 
 }
 
-func TestRand(t *testing.T) {
+func TestRandMat(t *testing.T) {
 	t.Helper()
 	row := 31
 	col := 42
-	m := Rand(row, col)
+	m := RandMat(row, col)
 	for i := range m {
 		for j := range m[i] {
 			if m[i][j] < 0.0 || m[i][j] >= 1.0 {
@@ -516,7 +516,7 @@ func TestAll(t *testing.T) {
 	notOne := func(i *float64) bool {
 		return *i != 1.0
 	}
-	SetAllTo(m, 1.0)
+	Set(m, 1.0)
 	if All(m, notOne) {
 		t.Errorf("m has non-one values in it, expected none")
 	}
@@ -530,16 +530,16 @@ func TestAny(t *testing.T) {
 			m[i][j] = float64(i*100 + j)
 		}
 	}
-	negative := func(i float64) bool {
-		return i < 0.0
+	negative := func(i *float64) bool {
+		return *i < 0.0
 	}
 	if Any(m, negative) {
 		t.Errorf("Any(negiative) is true, expected false")
 	}
-	notOne := func(i float64) bool {
-		return i != 1.0
+	notOne := func(i *float64) bool {
+		return *i != 1.0
 	}
-	SetAllTo(m, 1.0)
+	Set(m, 1.0)
 	if Any(m, notOne) {
 		t.Errorf("has non-one values in it, expected none")
 	}
@@ -549,7 +549,7 @@ func TestSum(t *testing.T) {
 	t.Helper()
 	row, col, val := 131, 12, 2.0
 	m := New(row, col)
-	SetAllTo(m, val)
+	Set(m, val)
 	res := Sum(m)
 	if res != float64(row*col)*val {
 		t.Errorf("expected %f, got %f", float64(row*col)*val, res)
@@ -557,7 +557,7 @@ func TestSum(t *testing.T) {
 	row = 12
 	col = 17
 	m = New(row, col)
-	SetAllTo(m, 1.0)
+	Set(m, 1.0)
 	for i := 0; i < col; i++ {
 		q := Sum(m, 1, i)
 		if q != float64(row) {
@@ -570,7 +570,7 @@ func TestSum(t *testing.T) {
 			t.Errorf("at col %d expected sum to be %f, got %f", i, float64(row), q)
 		}
 	}
-	SetAllTo(m, 1.0)
+	Set(m, 1.0)
 	for i := 0; i < row; i++ {
 		q := Sum(m, 0, i)
 		if q != float64(col) {
@@ -590,7 +590,7 @@ func BenchmarkSum1(b *testing.B) {
 		*i += *j
 	})
 	m := New(1000)
-	SetAllTo(m, 3.0)
+	Set(m, 3.0)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = sum(m)
@@ -599,7 +599,7 @@ func BenchmarkSum1(b *testing.B) {
 
 func BenchmarkSum(b *testing.B) {
 	m := New(1000)
-	SetAllTo(m, 3.0)
+	Set(m, 3.0)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		_ = Sum(m)
@@ -610,7 +610,7 @@ func TestProd(t *testing.T) {
 	t.Helper()
 	row, col, val := 3, 2, 2.0
 	m := New(row, col)
-	SetAllTo(m, val)
+	Set(m, val)
 	res := Prod(m)
 	if res != 64.0 {
 		t.Errorf("expected %f, got %f", 64.0, res)
@@ -618,7 +618,7 @@ func TestProd(t *testing.T) {
 	row = 12
 	col = 17
 	m = New(row, col)
-	SetAllTo(m, 1.0)
+	Set(m, 1.0)
 	for i := 0; i < col; i++ {
 		q := Prod(m, 1, i)
 		if q != 1.0 {
@@ -649,19 +649,19 @@ func TestAvg(t *testing.T) {
 	t.Helper()
 	row, col, val := 7, 6, 3.0
 	m := New(row, col)
-	SetAllTo(m, val)
+	Set(m, val)
 	a := Avg(m)
 	if a != val {
 		t.Errorf("expected %f, got %f", val, a)
 	}
 	val = 2.1
-	SetAllTo(m, val)
+	Set(m, val)
 	a = Avg(m, 1, 0)
 	if a != val {
 		t.Errorf("expected %f, got %f", val, a)
 	}
 	val = 1.0
-	SetAllTo(m, val)
+	Set(m, val)
 	a = Avg(m, 0, 1)
 	if a != val {
 		t.Errorf("expected %f, got %f", val, a)
